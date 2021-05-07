@@ -68,9 +68,22 @@ def intersection_pts(l1, l2):
     X = np.linalg.solve(A, b)
     return X
 
+points = []
+
 # Show results
 plt.imshow(A)
 for i in range(4):
     x = intersection_pts(new_lines[i], new_lines[(i+1) % 4])
+    points.append(list(x))
     plt.plot(x[0], x[1], color='red', marker='o', markersize=12)
 plt.show()
+
+points = np.array(points, dtype=np.int32)
+
+mask = np.zeros(A.shape[:2], dtype=np.uint8)
+cv2.fillPoly(mask, pts=[points], color=255)
+
+plt.imshow(mask)
+plt.show()
+
+cv2.imwrite('../src/WSC_mask.png', mask)
