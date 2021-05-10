@@ -1,11 +1,11 @@
-from scipy.linalg import null_space
+from scipy.linalg import null_space, svd
 import numpy as np
 import pdb
 import cv2
 
 
 def createGrid(pxstep=20):
-    img = cv2.imread('../src/WSC_sample.png', cv2.IMREAD_COLOR)
+    img = cv2.imread('../src/WSC_sample_good.png', cv2.IMREAD_COLOR)
     width, height, channels = img.shape
 
     grid = np.zeros((width, height))
@@ -95,6 +95,16 @@ def normalize(v):
     return v / norm
 
 
+def nullspace(A, atol=0.04, rtol=0):
+    A = np.atleast_2d(A)
+    u, s, vh = svd(A)
+    tol = max(atol, rtol * s[0])
+    nnz = (s >= tol).sum()
+    ns = vh[nnz:].conj().T
+    return ns
+
+
+
 A = None
 for x_i, X_i in zip(x, X):
     A = compute(x_i, X_i) if A is None else np.concatenate(
@@ -105,6 +115,34 @@ for x_i, X_i in zip(x, X):
 rank = np.linalg.matrix_rank(A)
 # pdb.set_trace()
 
-p = null_space(A)
-p = normalize(p)
+p = nullspace(A)
+# p = normalize(p)
 p = p.reshape((3, 4))
+
+res = p@np.array([-0.292, 1.0475, 0, 1]).T
+print(res/[res[2]])
+
+img = cv2.imread('./src/WSC_sample_good.png', cv2.IMREAD_COLOR)
+
+
+M = img.shape[0]
+N = img.shape[1]
+
+B = np.zeros((M,N,3))
+
+[K, R, transVect, rotMatrixX, rotMatrixY, rotMatrixZ, eulerAngles] = cv2.decomposeProjectionMatrix(p)
+
+
+res = np.linalg.inv(K) @ [640, 285, 1]
+print(res/res[2])
+
+C = -np.linalg.inv(p[:,:-1])@p[:,3]
+C = np.append(C,1)
+
+
+print(p@C)
+l1 = 1
+
+inv = np.linalg.inv(K@R) @ np.array([640, 285, 1]).T
+res = C + l1 * np.append(inv,0)
+print(res)
