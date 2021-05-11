@@ -1,7 +1,10 @@
 from scipy.linalg import null_space, svd
 import numpy as np
-import pdb
+# import pdb
+from matplotlib import pyplot as plt
 import cv2
+
+img = cv2.imread('../src/WSC_sample_good.png', cv2.IMREAD_COLOR)
 
 
 def createGrid(pxstep=20):
@@ -66,15 +69,15 @@ x = np.array([
 ])
 
 X = np.array([
-    [8.89, 1.7845, 0, 1],  # top-right-inside corner
-    [8.89, -1.7845, 0, 1],  # bottom-right-inside corner
-    [-8.89, -1.7845, 0, 1],  # bottom-left-inside corner
-    [-8.89, 1.7845, 0, 1],  # top-left-inside corner
+    [.889, 1.7845, 0, 1],  # top-right-inside corner
+    [.889, -1.7845, 0, 1],  # bottom-right-inside corner
+    [-.889, -1.7845, 0, 1],  # bottom-left-inside corner
+    [-.889, 1.7845, 0, 1],  # top-left-inside corner
 
-    [8.94, 1.8345, 0.04, 1],  # top-right-outside corner
-    [8.94, -1.8345, 0.04, 1],  # bottom-right-outside corner
-    [-8.94, -1.8345, 0.04, 1],  # bottom-left-outside corner
-    [-8.94, 1.8345, 0.04, 1],  # top-left-outside corner
+    [.894, 1.8345, 0.04, 1],  # top-right-outside corner
+    [.894, -1.8345, 0.04, 1],  # bottom-right-outside corner
+    [-.894, -1.8345, 0.04, 1],  # bottom-left-outside corner
+    [-.894, 1.8345, 0.04, 1],  # top-left-outside corner
 
     [0, 0, 0, 1],  # blue ball
     [0, -0.89225, 0, 1],  # pink ball
@@ -82,7 +85,6 @@ X = np.array([
     [0, 1.0475, 0, 1],  # brown ball
     [0.292, 1.0475, 0, 1],  # green ball
     [-0.292, 1.0475, 0, 1],  # yellow ball
-
 ])
 
 
@@ -132,11 +134,14 @@ rank = np.linalg.matrix_rank(A)
 print(f"The rank of the matrix is: {rank}")
 
 
-pdb.set_trace()
+# pdb.set_trace()
 p = decomposeWithSvd(A)
+print(p)
 p = decomposeWithNullSpace(A)
+print(p)
+print(p)
 
-img = cv2.imread('../src/WSC_sample_good.png', cv2.IMREAD_COLOR)
+img = cv2.imread('./src/WSC_sample_good.png', cv2.IMREAD_COLOR)
 
 
 M = img.shape[0]
@@ -148,6 +153,7 @@ B = np.zeros((M,N,3))
 
 
 res = np.linalg.inv(K) @ [640, 285, 1]
+print("Linalg inv")
 print(res/res[2])
 
 C = -np.linalg.inv(p[:,:-1])@p[:,3]
@@ -159,5 +165,11 @@ l1 = 1
 
 inv = np.linalg.inv(K@R) @ np.array([640, 285, 1]).T
 res = C + l1 * np.append(inv,0)
-pdb.set_trace()
+# pdb.set_trace()
+print("Cose")
 print(res)
+
+plt.imshow(img)
+plt.scatter(x[:,0], x[:,1], color='red')
+plt.show()
+
