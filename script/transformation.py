@@ -26,8 +26,6 @@ def createGrid(pxstep=20):
     matrix = cv2.getPerspectiveTransform(pts1, pts2)
     warped = cv2.warpPerspective(grid, matrix, (height, width))
 
-    pdb.set_trace()
-
     # [blend_images]
     alpha = 0.5
     beta = (1.0 - alpha)
@@ -103,7 +101,25 @@ def nullspace(A, atol=0.04, rtol=0):
     ns = vh[nnz:].conj().T
     return ns
 
+def decomposeWithSvd(A):
+    u, s, vh = np.linalg.svd(A, full_matrices=True)
+    #print(u.shape, s.shape, vh.shape)
+    p = vh.T[:,-1] 
+    # p = normalize(p)  the vector is already normalized
+    p = p.reshape((3, 4))
+    #print(p)
+    res = p @ np.array([-0.292, 1.0475, 0, 1])
+    print(res/[res[2]])
+    return p
 
+def decomposeWithNullSpace(A):
+    p = nullspace(A)
+    # p = normalize(p)
+    p = p.reshape((3, 4))
+
+    res = p @ np.array([-0.292, 1.0475, 0, 1]).T
+    print(res/[res[2]])
+    return p
 
 A = None
 for x_i, X_i in zip(x, X):
@@ -113,16 +129,14 @@ for x_i, X_i in zip(x, X):
 # createGrid()
 
 rank = np.linalg.matrix_rank(A)
-# pdb.set_trace()
+print(f"The rank of the matrix is: {rank}")
 
-p = nullspace(A)
-# p = normalize(p)
-p = p.reshape((3, 4))
 
-res = p@np.array([-0.292, 1.0475, 0, 1]).T
-print(res/[res[2]])
+pdb.set_trace()
+p = decomposeWithSvd(A)
+p = decomposeWithNullSpace(A)
 
-img = cv2.imread('./src/WSC_sample_good.png', cv2.IMREAD_COLOR)
+img = cv2.imread('../src/WSC_sample_good.png', cv2.IMREAD_COLOR)
 
 
 M = img.shape[0]
@@ -145,4 +159,5 @@ l1 = 1
 
 inv = np.linalg.inv(K@R) @ np.array([640, 285, 1]).T
 res = C + l1 * np.append(inv,0)
+pdb.set_trace()
 print(res)
