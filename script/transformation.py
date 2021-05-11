@@ -3,7 +3,6 @@ import numpy as np
 import pdb
 import cv2
 
-
 def createGrid(pxstep=20):
     img = cv2.imread('../src/WSC_sample_good.png', cv2.IMREAD_COLOR)
     width, height, channels = img.shape
@@ -63,6 +62,7 @@ x = np.array([
     [640, 142, 1],  # brown ball
     [732, 142, 1],  # green ball
     [547, 142, 1],  # yellow ball
+
 ])
 
 X = np.array([
@@ -109,6 +109,7 @@ def decomposeWithSvd(A):
     p = p.reshape((3, 4))
     #print(p)
     res = p @ np.array([-0.292, 1.0475, 0, 1])
+    print(p)
     print(res/[res[2]])
     return p
 
@@ -118,6 +119,7 @@ def decomposeWithNullSpace(A):
     p = p.reshape((3, 4))
 
     res = p @ np.array([-0.292, 1.0475, 0, 1]).T
+    print(p)
     print(res/[res[2]])
     return p
 
@@ -154,10 +156,10 @@ C = -np.linalg.inv(p[:,:-1])@p[:,3]
 C = np.append(C,1)
 
 
-print(p@C)
+print(p @ C)
 l1 = 1
 
-inv = np.linalg.inv(K@R) @ np.array([640, 285, 1]).T
+inv = np.linalg.inv(K @ R) @ np.array([640, 285, 1]).T
 res = C + l1 * np.append(inv,0)
 pdb.set_trace()
 print(res)
