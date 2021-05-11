@@ -71,10 +71,10 @@ X = np.array([
     [-8.89, -1.7845, 0, 1],  # bottom-left-inside corner
     [-8.89, 1.7845, 0, 1],  # top-left-inside corner
 
-    [8.94, 1.7895, 0.04, 1],  # top-right-outside corner
-    [8.94, -1.7895, 0.04, 1],  # bottom-right-outside corner
-    [-8.94, -1.7895, 0.04, 1],  # bottom-left-outside corner
-    [-8.94, 1.7895, 0.04, 1],  # top-left-outside corner
+    [8.94, 1.8345, 0.04, 1],  # top-right-outside corner
+    [8.94, -1.8345, 0.04, 1],  # bottom-right-outside corner
+    [-8.94, -1.8345, 0.04, 1],  # bottom-left-outside corner
+    [-8.94, 1.8345, 0.04, 1],  # top-left-outside corner
 
     [0, 0, 0, 1],  # blue ball
     [0, -0.89225, 0, 1],  # pink ball
