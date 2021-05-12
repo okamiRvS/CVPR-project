@@ -16,36 +16,27 @@ class Transformation():
         [-.894, -1.8345, 0.04, 1],  # bottom-left-outside corner
         [-.894, 1.8345, 0.04, 1],  # top-left-outside corner
 
+        [-0.292, 1.0475, 0, 1],  # yellow ball,
+        [0.292, 1.0475, 0, 1],  # green ball
+        [0, 1.0475, 0, 1],  # brown ball
         [0, 0, 0, 1],  # blue ball
         [0, -0.89225, 0, 1],  # pink ball
         [0, -1.4605, 0, 1],  # black ball
-        [0, 1.0475, 0, 1],  # brown ball
-        [0.292, 1.0475, 0, 1],  # green ball
-        [-0.292, 1.0475, 0, 1],  # yellow ball
     ])
 
 
-    def __init__(self, imgpath, points):
+    def __init__(self, imgpath, angle_points, point_balls):
         self.imgpath = imgpath
-
-        self.x = np.array([
-            [903, 55, 1],  # top-right-inside corner
-            [1026, 610, 1],  # bottom-right-inside corner
-            [255, 610, 1],  # bottom-left-inside corner
-            [378, 55, 1],  # top-left-inside corner
-
-            [920, 37, 1],  # top-right-outside corner
-            [1056, 625, 1],  # bottom-right-outside corner
-            [216, 625, 1],  # bottom-left-outside corner
-            [362, 37, 1],  # top-left-outside corner
-
-            [640, 285, 1],  # blue ball
-            [640, 433, 1],  # pink ball
-            [640, 545, 1],  # black ball
-            [640, 142, 1],  # brown ball
-            [732, 142, 1],  # green ball
-            [547, 142, 1],  # yellow ball
-        ])
+        self.x = np.vstack((
+            np.array([
+                [903, 55, 1],  # top-right-inside corner
+                [1026, 610, 1],  # bottom-right-inside corner
+                [255, 610, 1],  # bottom-left-inside corner
+                [378, 55, 1]  # top-left-inside corner
+            ]),
+            angle_points,
+            point_balls
+        ))
 
     def run(self):
         self.ProjectionMatrix()

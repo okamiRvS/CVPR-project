@@ -11,7 +11,7 @@ class Hough_circles():
         self.img_maskpath = img_maskpath
 
     def run(self):
-        self.HoughCircles()
+        return self.HoughCircles()
 
     def HoughCircles(self):
         mask = cv.imread(self.img_maskpath, 0)
@@ -42,11 +42,12 @@ class Hough_circles():
                                   minRadius=8, maxRadius=12)
 
         my_circles = circles[0][np.argsort(circles[0][:, 1])]
-        balls = np.vstack((my_circles[1],
-                           my_circles[2],
-                           my_circles[3],
-                           my_circles[5],
-                           my_circles[9]))
+        balls = np.vstack((my_circles[1],   # yellow ball
+                           np.hstack((np.array([ my_circles[2,0] + (my_circles[2,0]- my_circles[1,0])]), my_circles[1,1:])), # green ball
+                           my_circles[2],   # brown ball
+                           my_circles[3],   # blue ball
+                           my_circles[5],   # pink ball
+                           my_circles[9]))  # black ball
 
         print(balls[:, 1])
         balls[:, 1] = balls[:, 1] + (balls[:, 2] * 2 / 3)
@@ -56,6 +57,9 @@ class Hough_circles():
         plt.plot(balls[0, 0], balls[0, 1], 'ro')
         #plt.Circle((int(balls[0,0]), int(balls[0,1])), 1, color='r')
         plt.show()
+
+        radius = balls[:,2]
+        point_balls = np.hstack(( np.int32(np.around(balls[:,:2])), np.ones((6,1), dtype=np.int32)))
 
         if circles is not None:
             circles = np.uint16(np.around(circles))
@@ -70,4 +74,4 @@ class Hough_circles():
         cv.imshow("detected circles", src)
         cv.waitKey(0)
 
-        return balls
+        return point_balls, radius

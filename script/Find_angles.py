@@ -1,6 +1,7 @@
 import numpy as np
 import cv2, math
 from matplotlib import pyplot as plt
+import pdb
 
 class Find_angles():
 
@@ -8,7 +9,7 @@ class Find_angles():
         self.imgpath = imgpath
 
     def run(self):
-        self.HoughLine()
+        return self.HoughLine()
 
     def HoughLine(self):
         A = cv2.imread(self.imgpath)
@@ -94,3 +95,5 @@ class Find_angles():
         plt.show()
 
         cv2.imwrite('src/WSC_mask.png', mask)
+
+        return np.hstack((points, np.ones((4,1), dtype=np.int32)))
