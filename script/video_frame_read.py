@@ -5,16 +5,15 @@ from pathlib import Path
 from tqdm import tqdm
 
 
-filename = '../src/WSC_trimmed_video.mp4'
-
+filename = 'src/WSC_trimmed_video.mp4'
 cap = cv2.VideoCapture(filename)
 
-mask = cv2.imread('../src/WSC_mask.png', 0)
+mask = cv2.imread('src/WSC_mask.png', 0)
 n_el = np.sum(mask == 255)
 
 r, g, b = [], [], []
 
-Path("../images/").mkdir(parents=True, exist_ok=True)
+Path("images/").mkdir(parents=True, exist_ok=True)
 
 if cap.isOpened():
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -39,7 +38,7 @@ if cap.isOpened():
         b.append(np.sum(res[:, :, 0] * (mask == 255)) / n_el)
 
         if 115 <= g[-1] <= 135 and r[-1] < 15 and b[-1] < 25:
-            cv2.imwrite(f'../images/{it}.png', res)
+            cv2.imwrite(f'images/{it}.png', res)
     pbar.close()
     cap.release()
 
