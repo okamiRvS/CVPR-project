@@ -16,14 +16,13 @@ class Transformation():
         [-.894, -1.8345, 0.04, 1],  # bottom-left-outside corner
         [-.894, 1.8345, 0.04, 1],  # top-left-outside corner
 
-        [-0.292, 1.0475, 0, 1],  # yellow ball,
+        [-0.292, 1.0475, 0, 1],  # yellow ball
         [0.292, 1.0475, 0, 1],  # green ball
         [0, 1.0475, 0, 1],  # brown ball
         [0, 0, 0, 1],  # blue ball
         [0, -0.89225, 0, 1],  # pink ball
         [0, -1.4605, 0, 1],  # black ball
     ])
-
 
     def __init__(self, imgpath, angle_points, point_balls):
         self.imgpath = imgpath
@@ -54,6 +53,8 @@ class Transformation():
 
         p = self.decomposeWithSvd(A)
         print(p)
+        
+        # Another way to do that
         p = self.decomposeWithNullSpace(A)
         print(p)
 
@@ -78,7 +79,6 @@ class Transformation():
 
         inv = np.linalg.inv(K @ R) @ np.array([640, 285, 1]).T
         res = C + l1 * np.append(inv,0)
-        # pdb.set_trace()
         print(res)
 
         plt.imshow(img)
@@ -116,7 +116,6 @@ class Transformation():
         cv2.imshow("Warped", warped)
         cv2.imshow('Hehe', grid)
         cv2.waitKey(0)
-
 
     def compute(self, x_i, X_i):
         x = np.zeros((2, 12))

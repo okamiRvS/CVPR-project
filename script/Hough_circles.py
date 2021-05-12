@@ -24,17 +24,7 @@ class Hough_circles():
         #hsv = cv.cvtColor(src, cv.COLOR_BGR2HSV)
 
         gray = ycbcr[:, :, 0]
-        #gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
-        '''
-        plt.imshow(gray)
-        plt.show()
-        '''
-
         gray = cv.medianBlur(gray, 5)
-        '''
-        plt.imshow(gray)
-        plt.show()
-        '''
 
         rows = gray.shape[0]
         circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, rows / 20,
@@ -49,9 +39,9 @@ class Hough_circles():
                            my_circles[5],   # pink ball
                            my_circles[9]))  # black ball
 
-        print(balls[:, 1])
+        #print(balls[:, 1])
         balls[:, 1] = balls[:, 1] + (balls[:, 2] * 2 / 3)
-        print(balls[:, 1])
+        #print(balls[:, 1])
 
         plt.imshow(src)
         plt.plot(balls[0, 0], balls[0, 1], 'ro')
