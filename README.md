@@ -1,6 +1,8 @@
 # Computer Vision & Pattern Recognition Project
 > The last project for Computer Vision & Pattern Recognition course @USI 20/21. 
 
+Link repository: https://github.com/okamiRvS/CVPR-project
+
 #### Contributors
 
 - **[Umberto Cocca](https://github.com/okamiRvS)**
