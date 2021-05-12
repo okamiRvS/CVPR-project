@@ -5,4 +5,11 @@ The goal is to reconstruct the snooker table and balls from side view starting f
  2. reconstruct camera position;
  3. reconstruct ball positions;
  4. automatically detect balls;
- 5. find 2D patterns among the red balls.C
+ 5. find 2D patterns among the red balls.
+
+To run the main script:
+'''
+	git clone https://github.com/okamiRvS/CVPR-project.git
+	cd CVPR-project/script
+	python3 main.py
+'''
