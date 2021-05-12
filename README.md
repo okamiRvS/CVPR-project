@@ -8,8 +8,8 @@ The goal is to reconstruct the snooker table and balls from side view starting f
  5. find 2D patterns among the red balls.
 
 To run the main script:
-'''
+```bash
 	git clone https://github.com/okamiRvS/CVPR-project.git
 	cd CVPR-project/script
 	python3 main.py
-'''
+```
