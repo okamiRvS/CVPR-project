@@ -14,6 +14,22 @@ class Video_frame_read():
     def run(self):
         self.read_video()
 
+    @staticmethod
+    def group_consecutives(vals, step=1):
+        """Return list of consecutive lists of numbers from vals (number list)."""
+        run = []
+        result = [run]
+        expect = None
+        for v in vals:
+            if (v == expect) or (expect is None):
+                run.append(v)
+            else:
+                run = [v]
+                result.append(run)
+            expect = v + step
+        return result
+
+
     def read_video(self):
         cap = cv2.VideoCapture(self.videopath)
 
@@ -21,6 +37,7 @@ class Video_frame_read():
         n_el = np.sum(mask == 255)
 
         r, g, b = [], [], []
+        frames = []
 
         Path("images/").mkdir(parents=True, exist_ok=True)
 
@@ -47,6 +64,7 @@ class Video_frame_read():
                 b.append(np.sum(res[:, :, 0] * (mask == 255)) / n_el)
 
                 if 115 <= g[-1] <= 135 and r[-1] < 15 and b[-1] < 25:
+                    frames.append(it - 1)
                     cv2.imwrite(f'images/{it}.png', res)
             pbar.close()
             cap.release()
@@ -54,4 +72,6 @@ class Video_frame_read():
         plt.plot(r, color='red')
         plt.plot(g, color='green')
         plt.plot(b, color='blue')
+        for f in Video_frame_read.group_consecutives(frames):
+            plt.axvspan(min(f), max(f), color='yellow', alpha=0.4)
         plt.show()
