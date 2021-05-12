@@ -91,3 +91,10 @@ To solve this task we have seen that for each frame, where there is the snooker 
 <img src="https://github.com/okamiRvS/CVPR-project/blob/master/src/Figure_1.png" >
 <p>Fig. 2: This plot show us where bad and good frames are visibile in the "WSC_trimmed" as test</p>
 </div>
+
+As it can be seen from the Figure 2, all the frames we highlighted in yellow are "good" frames -- the ones we have to extract from the video. The simple approach given by using a threshold on each channel of the RGB image worked well. We used the following thresholds:
+ - $115 \leq G \leq 135$
+ - $R < 15$
+ - $B < 25$
+
+Suitable values for the threshold have been calculated empirically, given the values for some "good" frames and for some "bad" frames.
