@@ -84,3 +84,8 @@ With these points we compute the camera matrix P that describes how a camera map
 2) Come up with an algorithm for pre-processing the frames of the whole video "WSC.mp4" in the sense that you should extract all frames from the video that show the table as in the picture "WSC sample.png" and discard all other frames showing the table from a different viewpoint, focusing on a player, or containing advertisement.
 
 To solve this task we have seen that each frame where there is the snooker table from a top view, the camera is totally fixed (so no camera movement). Therefore, we apply a mask in each frames of the video with the goal of reduce the domain of pixel information. Since the top view of the snooker table is composed for the most of green colour we averaged the amount of colour in the "WSC sample.png" picture to get a threshold and with a slight range flexibility we used it to to extract only the frames where the table is showed as in "WSC sample.png" picture. We've got approximately 28gb of images and for this reason we rendered them as a video (visibile in the drive folder).
+
+<div align="center">
+<img src="https://github.com/okamiRvS/CVPR-project/blob/master/src/Figure_1.png" >
+<p>Fig. 2: This plot show us where bad and good frames are visibile in the "WSC_trimmed" as test</p>
+</div>
