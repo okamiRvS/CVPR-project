@@ -70,6 +70,8 @@ class Transformation():
 
         C = -np.linalg.inv(p[:,:-1])@p[:,3]
         C = np.append(C,1)
+        print("C (camera center):")
+        print(C)
 
         print(p @ C)
         l1 = 1
@@ -77,7 +79,6 @@ class Transformation():
         inv = np.linalg.inv(K @ R) @ np.array([640, 285, 1]).T
         res = C + l1 * np.append(inv,0)
         # pdb.set_trace()
-        print("Cose")
         print(res)
 
         plt.imshow(img)
