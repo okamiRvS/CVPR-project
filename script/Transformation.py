@@ -3,6 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import cv2
 
+
 class Transformation():
 
     X = np.array([
@@ -15,7 +16,7 @@ class Transformation():
         [.894, -1.8345, 0.04, 1],  # bottom-right-outside corner
         [-.894, -1.8345, 0.04, 1],  # bottom-left-outside corner
         [-.894, 1.8345, 0.04, 1],  # top-left-outside corner
-
+        
         [-0.292, 1.0475, 0, 1],  # yellow ball
         [0.292, 1.0475, 0, 1],  # green ball
         [0, 1.0475, 0, 1],  # brown ball
@@ -49,14 +50,12 @@ class Transformation():
         # createGrid()
 
         rank = np.linalg.matrix_rank(A)
-        print(f"The rank of the matrix is: {rank}")
+        print(f"The rank of the A matrix is: {rank}")
 
         p = self.decomposeWithSvd(A)
-        print(p)
-        
+       
         # Another way to do that
         p = self.decomposeWithNullSpace(A)
-        print(p)
 
         img = cv2.imread(self.imgpath, cv2.IMREAD_COLOR)
         M, N, _ = img.shape
@@ -64,23 +63,30 @@ class Transformation():
         B = np.zeros((M,N,3))
 
         [K, R, transVect, rotMatrixX, rotMatrixY, rotMatrixZ, eulerAngles] = cv2.decomposeProjectionMatrix(p)
+        print("\nWe decompose p to get K, R, _")
+        print(f"K = {K}")
+        print(f"\nR = {R}")
 
-        res = np.linalg.inv(K) @ [640, 285, 1]
-        print("Linalg inv")
+        '''
+        res = np.linalg.inv(K) @ [640, 288, 1]
         print(res/res[2])
+        '''
 
         C = -np.linalg.inv(p[:,:-1])@p[:,3]
         C = np.append(C,1)
-        print("C (camera center):")
-        print(C)
+        print("\nCamera center C:")
+        print(f"C = {C}")
 
-        print(p @ C)
-        l1 = 1
+        print("\nWe check p*C if is equal to zero")
+        print(f"{p @ C}\n")
 
-        inv = np.linalg.inv(K @ R) @ np.array([640, 285, 1]).T
+        '''
+        l1 = 1 # Arbitrary value
+        inv = np.linalg.inv(K @ R) @ np.array([640, 288, 1]).T
         res = C + l1 * np.append(inv,0)
-        print(res)
-
+        print(f"{res}\n")
+        '''
+ 
         plt.imshow(img)
         plt.scatter(self.x[:,0], self.x[:,1], color='red')
         plt.show()
@@ -140,7 +146,11 @@ class Transformation():
         p = p.reshape((3, 4))
 
         res = p @ np.array([-0.292, 1.0475, 0, 1])
+        print("\nThe p matrix through SVD is:")
         print(p)
+
+        print("\n3d -> 2d")
+        print("We check p * [-0.292, 1.0475, 0, 1] to see if we get about [ 548  143    1] :")
         print(res/[res[2]])
         return p
 
@@ -149,6 +159,10 @@ class Transformation():
         p = p.reshape((3, 4))
 
         res = p @ np.array([-0.292, 1.0475, 0, 1]).T
+        print("\nThe p matrix through NullSpace is:")
         print(p)
+
+        print("\n3d -> 2d")
+        print("We check p * [-0.292, 1.0475, 0, 1] to see if we get about [ 548  143    1] :")
         print(res/[res[2]])
         return p

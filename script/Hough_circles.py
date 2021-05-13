@@ -63,5 +63,4 @@ class Hough_circles():
 
         cv.imshow("detected circles", src)
         cv.waitKey(0)
-
         return point_balls, radius

@@ -4,7 +4,7 @@ from Hough_circles import Hough_circles
 from Transformation import Transformation
 from Video_frame_read import Video_frame_read
 import numpy as np
-import pdb
+
 
 def main():
     # First task
