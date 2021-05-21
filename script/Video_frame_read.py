@@ -29,7 +29,6 @@ class Video_frame_read():
             expect = v + step
         return result
 
-
     def read_video(self):
         cap = cv2.VideoCapture(self.videopath)
 
@@ -41,6 +40,16 @@ class Video_frame_read():
 
         Path("images/").mkdir(parents=True, exist_ok=True)
 
+        myFrameNumber = 17000
+
+        # get total number of frames
+        totalFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+
+        # check for valid frame number
+        if myFrameNumber >= 0 & myFrameNumber <= totalFrames:
+            # set frame position
+            cap.set(cv2.CAP_PROP_POS_FRAMES, myFrameNumber)
+
         if cap.isOpened():
             width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -48,8 +57,10 @@ class Video_frame_read():
 
             fourcc = cv2.VideoWriter_fourcc(*'DIVX')
 
-            it = 0
-            pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
+            it = 17000
+            pbar = tqdm(total=totalFrames)
+            pbar.n = it
+            pbar.last_print_n = it
             while True:
                 ret, frame = cap.read()
                 if not ret:
@@ -57,21 +68,23 @@ class Video_frame_read():
                 it += 1
                 pbar.update(1)
 
+
                 res = cv2.bitwise_and(frame, frame, mask=mask)
 
-                r.append(np.sum(res[:, :, 2] * (mask == 255)) / n_el)
-                g.append(np.sum(res[:, :, 1] * (mask == 255)) / n_el)
-                b.append(np.sum(res[:, :, 0] * (mask == 255)) / n_el)
+                r = np.sum(res[:, :, 2] * (mask == 255)) / n_el
+                g = np.sum(res[:, :, 1] * (mask == 255)) / n_el
+                b = np.sum(res[:, :, 0] * (mask == 255)) / n_el
 
-                if 115 <= g[-1] <= 135 and r[-1] < 15 and b[-1] < 25:
+                if 120 <= g <= 130 and r < 12 and b < 23:
                     frames.append(it - 1)
-                    cv2.imwrite(f'images/{it}.png', res)
+                    cv2.imshow("Frame", res)
+                    cv2.waitKey(2)
             pbar.close()
             cap.release()
 
-        plt.plot(r, color='red')
-        plt.plot(g, color='green')
-        plt.plot(b, color='blue')
+        # plt.plot(r, color='red')
+        # plt.plot(g, color='green')
+        # plt.plot(b, color='blue')
         for f in Video_frame_read.group_consecutives(frames):
             plt.axvspan(min(f), max(f), color='yellow', alpha=0.4)
         plt.show()
