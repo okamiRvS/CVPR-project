@@ -11,7 +11,7 @@ def main():
     # imgpath = "./src/WSC_sample_good.png"
     # angle_points = Find_angles(imgpath).run()
 
-    img_maskpath = "./src/WSC_mask.png"
+    img_maskpath = "../src/WSC_mask.png"
     # point_balls, radius = Hough_circles(imgpath, img_maskpath).run()
 
     # Transformation(imgpath, angle_points, point_balls).run()
@@ -19,7 +19,7 @@ def main():
     # Second task
     #Average_rgb(imgpath, img_maskpath).run()
 
-    videopath = "./src/WSC.mp4" # test mp4 file
+    videopath = "../src/WSC.mp4" # test mp4 file
     Video_frame_read(videopath, img_maskpath).run()
     
 if __name__ == "__main__":
