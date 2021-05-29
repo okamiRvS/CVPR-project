@@ -1,7 +1,12 @@
 import cv2
 import pdb
 import numpy as np
+from tqdm import tqdm
 from matplotlib import pyplot as plt
+
+
+txt_file = open("../ciccio.csv", "w")
+
 
 
 def get_red_balls(frame):
@@ -37,8 +42,10 @@ def get_red_balls(frame):
 
 
 def main():
-    filename = './src/output.avi'
+    filename = '../src/output.avi'
     cap = cv2.VideoCapture(filename)
+
+    pbar = tqdm(total=int(cap.get(cv2.CAP_PROP_FRAME_COUNT)))
 
     if cap.isOpened():
         it = 0
@@ -46,22 +53,30 @@ def main():
             ret, frame = cap.read()
             if not ret:
                 break
+            pbar.update(1)
             it += 1
 
             points = get_red_balls(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-            for i, (y, x) in enumerate(points):
-                cv2.circle(frame, (y, x), 4, (255, 255, 255), 2)
-                # (img, text, org, fontFace, fontScale, color
-                # cv2.putText(frame, str(i), (y, x),
-                #             cv2.FONT_HERSHEY_DUPLEX, .6, (0, 0, 0))
+
+            if len(points) == 4:
+                txt_file.write(f'{it-1};')
+                for (x, y) in points:
+                    txt_file.write(f'({x};{y});')
+                    # cv2.circle(frame, (y, x), 4, (255, 255, 255), 2)
+                    # (img, text, org, fontFace, fontScale, color
+                    # cv2.putText(frame, str(i), (y, x),
+                    #             cv2.FONT_HERSHEY_DUPLEX, .6, (0, 0, 0))
+                txt_file.write('\n')
 
             # pdb.set_trace()
 
-            cv2.imshow('johnny', frame)
+            # cv2.imshow('johnny', frame)
             # plt.show()
-            cv2.waitKey(1)
+            # cv2.waitKey(1)
 
         cap.release()
+        txt_file.close()
+        pbar.close()
 
 
 if __name__ == '__main__':
