@@ -56,13 +56,13 @@ def worker(id, queue, filename):
 
     min_error = float('+inf')
 
-    alphas = [0]
+    alphas = [0, math.pi / 4, math.pi / 2, 1/2 * math.pi, math.pi, 5/4 * math.pi, 3/2 * math.pi, 7/4 * math.pi]
 
-    xs = np.arange(-1, 1.5, 1 / 2)
-    ys = np.arange(-1, 1.5, 1 / 2)
+    xs = np.arange(-1, 1.5, 1 / 4)
+    ys = np.arange(-1, 1.5, 1 / 4)
 
-    cxs = np.arange(0.5, 2, 1 / 2)
-    cys = np.arange(0.5, 2, 1 / 2)
+    cxs = np.arange(0.5, 2, 1 / 6)
+    cys = np.arange(0.5, 2, 1 / 6)
     # cz = 1
 
     numIterations = len(xs) * len(ys) * len(cys) * len(cxs) * len(alphas)
