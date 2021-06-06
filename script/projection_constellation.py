@@ -57,10 +57,11 @@ stars_2d = np.array(stars_2d)
 
 min_error = float('+inf')
 
-alphas = [0, math.pi / 2, math.pi, 3/2 * math.pi]
+# all 45° angles
+alphas = [0, math.pi / 4, math.pi / 2, 1/2 * math.pi, math.pi, 5/4 * math.pi, 3/2 * math.pi, 7/4 * math.pi]
 
-xs = np.arange(-1, 1.5, 1/3)
-ys = np.arange(-1, 1.5, 1/3)
+xs = np.arange(-1, 1.5, 1/5)
+ys = np.arange(-1, 1.5, 1/5)
 
 cxs = np.arange(0.5, 2, 1/3)
 cys = np.arange(0.5, 2, 1/3)
@@ -69,6 +70,8 @@ cys = np.arange(0.5, 2, 1/3)
 numIterations = len(xs) * len(ys) * len(cys) * len(cxs) * len(alphas)
 timeInformation = 0
 
+min_index = 0
+max_index = 0
 count = 0
 for x in xs:
     for y in ys:
@@ -101,7 +104,7 @@ for x in xs:
                         M_2d[i] = (M_2d[i] / M_2d[i][2]).T[0]
                         px, py = int(M_2d[i][0]), int(M_2d[i][1])
                         M_2d[i] = np.array([px,py])
-                        cv2.circle(img, (px, py), 1, (255,0,0), 10 )
+                        #cv2.circle(img, (px, py), 1, (255,0,0), 10 )
 
                     # pdb.set_trace()
                     # cv2.imshow("img", img)
@@ -112,16 +115,19 @@ for x in xs:
                     for i, points in enumerate(pointsVideo):
                         for j, pointsFrame in enumerate(points):
                             errors[i] += distance.euclidean(M_2d[j], pointsFrame)
+                            # aggiungere un errore anche in base al baricentro se coincide, farlo pesare di più
 
                     errors = np.array(errors)
                     min = np.argmin(errors)
                     max = np.argmax(errors)
 
+                    '''
                     for p in pointsVideo[max]:
                         cv2.circle(img, (p[0], p[1]), 1, (0,0,255), 20 )
 
                     for p in pointsVideo[min]:
                         cv2.circle(img, (p[0], p[1]), 1, (0,255,255), 15 )
+                    '''
 
                     final_time = time.time()-start_time
                     if count != 0:
@@ -130,18 +136,34 @@ for x in xs:
                         estimated_time = mean_time * (numIterations - count) 
                     else:
                         estimated_time = final_time
-                    print(f"Iteration: {count}, remainingIteration: {numIterations - count}, timeIteration: {final_time} seconds, estimated_time: {estimated_time} seconds\n\terror {errors[min]}, min_index {min}, alpha: {alpha}, (cx,cy): ({cx, cy})\n\n")
+                    print(f"Iter: {count}, remainingIter: {numIterations - count}, timeIter: {final_time} s, estimated_time: {estimated_time} s, min_error: {min_error}\n\terror {errors[min]}, min_index {min}, alpha: {alpha}, (cx,cy): ({cx, cy})\n\n")
                     count += 1
                     if errors[min] < min_error:
                         min_error = errors[min]
                         print(f"New min_error: {min_error}\n")
-                        final_info = f"Iteration: {count}, remainingIteration: {numIterations - count}, timeIteration: {final_time} seconds, estimated_time: {estimated_time} seconds\n\terror {errors[min]}, min_index {min}, alpha: {alpha}, (cx,cy): ({cx, cy})\n\n"
+                        final_info = f"Iter: {count}, remainingIter: {numIterations - count}, timeIter: {final_time} s, estimated_time: {estimated_time} s, min_error: {min_error}\n\terror {errors[min]}, min_index {min}, alpha: {alpha}, (cx,cy): ({cx, cy})\n\n"
+                        min_index = min
+                        max_index = max
+                        bestM_2d = M_2d
                         #cv2.imshow("img", img)
                         #cv2.waitKey(0)
 
-                    img = cv2.imread(imgpath)
+                    #img = cv2.imread(imgpath)
 
+for i in range(0,4):
+    pdb.set_trace()
+    px, py = M_2d[i][0], M_2d[i][1]
+    cv2.circle(img, (px, py), 1, (255,0,0), 10 )
+
+for p in pointsVideo[max]:
+    cv2.circle(img, (p[0], p[1]), 1, (0,0,255), 20 )
+
+for p in pointsVideo[min]:
+    cv2.circle(img, (p[0], p[1]), 1, (0,255,255), 15 )
+
+print("Best result:")
 print(final_info)
+
 cv2.imshow("img", img)
 cv2.waitKey(0)
 
