@@ -58,11 +58,11 @@ def worker(id, queue, filename):
 
     alphas = [0, math.pi / 4, math.pi / 2, 1/2 * math.pi, math.pi, 5/4 * math.pi, 3/2 * math.pi, 7/4 * math.pi]
 
-    xs = np.arange(-1, 1.5, 1 / 4)
-    ys = np.arange(-1, 1.5, 1 / 4)
+    xs = np.arange(-1, 1.5, 1 / 10)
+    ys = np.arange(-1, 1.5, 1 / 10)
 
-    cxs = np.arange(0.5, 2, 1 / 6)
-    cys = np.arange(0.5, 2, 1 / 6)
+    cxs = np.arange(0.5, 2, 1 / 10)
+    cys = np.arange(0.5, 2, 1 / 10)
     # cz = 1
 
     numIterations = len(xs) * len(ys) * len(cys) * len(cxs) * len(alphas)
@@ -214,6 +214,7 @@ if __name__ == '__main__':
 
         cv2.imshow(f"imgMin{d}", img)
 
+        '''
         myMaxFrameNumber = data[d]["frameMax"]
         
         # check for valid frame number
@@ -231,6 +232,7 @@ if __name__ == '__main__':
             cv2.circle(img, (p[0], p[1]), 1, (0,255,255), 15 )
         
         cv2.imshow(f"imgMax{d}", img)
+        '''
 
         print("Best result:")
         print(data[d]["final_info"])
