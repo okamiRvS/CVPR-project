@@ -56,13 +56,13 @@ def worker(id, queue, filename):
 
     min_error = float('+inf')
 
-    alphas = [0, math.pi / 4, math.pi / 2, 1/2 * math.pi, math.pi, 5/4 * math.pi, 3/2 * math.pi, 7/4 * math.pi]
+    alphas = [0, math.pi / 4, math.pi / 2, 3/4 * math.pi, math.pi, 5/4 * math.pi, 3/2 * math.pi, 7/4 * math.pi]
 
-    xs = np.arange(-1, 1.5, 1 / 8)
-    ys = np.arange(-1, 1.5, 1 / 8)
+    xs = np.arange(-1, 1.5, 1 / 4)
+    ys = np.arange(-1, 1.5, 1 / 4)
 
-    cxs = np.arange(0.5, 2, 1 / 8)
-    cys = np.arange(0.5, 2, 1 / 8)
+    cxs = np.arange(0.5, 2, 1 / 4)
+    cys = np.arange(0.5, 2, 1 / 4)
     # cz = 1
 
     numIterations = len(xs) * len(ys) * len(cys) * len(cxs) * len(alphas)
@@ -167,6 +167,9 @@ def split_csv(filename, n):
 
 if __name__ == '__main__':
 
+    imgpath = "../src/WSC_sample_good.png"
+    cap = cv2.VideoCapture("../src/output.avi")
+
     n_proc = multiprocessing.cpu_count() #- 1
     filenames = split_csv('../ciccio.csv', n_proc)
 
@@ -183,12 +186,9 @@ if __name__ == '__main__':
         j.join()
 
     data = queue.get()
-    
-    imgpath = "../src/WSC_sample_good.png"
 
     print(data)
 
-    cap = cv2.VideoCapture("../src/output.avi")
     # get total number of frames
     totalFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
 
@@ -237,5 +237,4 @@ if __name__ == '__main__':
         print("Best result:")
         print(data[d]["final_info"])
 
-    
     cv2.waitKey(0)
